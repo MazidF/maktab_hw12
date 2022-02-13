@@ -10,7 +10,19 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/black"
         tools:context=".MainActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:background="#000000"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@string/app_name"
+            app:titleTextColor="#FF0000" />
 
         <fragment
             android:id="@+id/container"
@@ -18,10 +30,10 @@
             android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
             app:defaultNavHost="true"
-            app:navGraph="@navigation/my_navigation_pragh"
+            app:navGraph="@navigation/my_navigation_graph"
             android:name="androidx.navigation.fragment.NavHostFragment"/>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView

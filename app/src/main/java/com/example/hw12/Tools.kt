@@ -101,12 +101,12 @@ fun getMovies(input: String): ArrayList<Movie> {
 }
 
 @BindingAdapter("app:isLiked")
-fun isLiked(imageView: ImageView, movie: Movie) {
+fun isLiked(imageView: ImageView, isLiked: Boolean) {
     imageView.apply {
-        if (movie.isLiked) {
+        if (isLiked) {
             setColorFilter(Color.RED)
         } else {
-            clearColorFilter()
+            setColorFilter(Color.parseColor("#777575"))
         }
     }
 }
@@ -115,5 +115,5 @@ fun isLiked(imageView: ImageView, movie: Movie) {
 fun setImage(imageView: ImageView, movie: Movie) {
     movie.image?.let {
         imageView.setImageBitmap(it)
-    } ?: imageView.setImageResource(R.drawable.icon_movie_default)
+    } ?: imageView.setImageResource(R.drawable.icon_movie_default_white)
 }

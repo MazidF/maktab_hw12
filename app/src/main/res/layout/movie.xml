@@ -9,7 +9,7 @@
         <import type="androidx.lifecycle.LiveData"/>
         <variable
             name="movie"
-            type="LiveData&lt;Movie>" />
+            type="Movie" />
         <variable
             name="model"
             type="NetflixViewModel" />
@@ -17,12 +17,13 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/movie_image"
-            android:layout_width="200dp"
-            android:layout_height="250dp"
+            android:layout_width="120dp"
+            android:layout_height="150dp"
             android:scaleType="fitXY"
             app:image="@{movie}"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -30,7 +31,6 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
             tools:srcCompat="@drawable/icon_movie_default" />
 
         <TextView
@@ -40,37 +40,23 @@
             android:layout_marginTop="15dp"
             android:gravity="center"
             android:text='@{movie.name, default="name"}'
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="18dp"
 
-            app:layout_constraintEnd_toEndOf="@+id/right"
-            app:layout_constraintStart_toStartOf="@+id/left"
+            app:layout_constraintEnd_toEndOf="@+id/movie_image"
+            app:layout_constraintStart_toStartOf="@+id/movie_image"
             app:layout_constraintTop_toBottomOf="@+id/movie_image" />
 
         <ImageView
             android:id="@+id/movie_like"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            app:isLiked='@{movie}'
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            app:isLiked="@{movie.isLiked()}"
             app:layout_constraintBottom_toBottomOf="@+id/movie_image"
             app:layout_constraintEnd_toEndOf="@+id/movie_image"
             app:srcCompat="@drawable/ic_favorite" />
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="left"
-            app:constraint_referenced_ids="movie_image" />
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="right"
-            app:constraint_referenced_ids="movie_image" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

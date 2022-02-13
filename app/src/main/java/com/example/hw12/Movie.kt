@@ -1,6 +1,7 @@
 package com.example.hw12
 
 import android.graphics.Bitmap
+import androidx.lifecycle.MutableLiveData
 
 data class Movie(val name: String, val image: Bitmap? = null) {
 
@@ -10,5 +11,7 @@ data class Movie(val name: String, val image: Bitmap? = null) {
     }
 
     val id = getId()
-    var isLiked = false
+    val isLiked by lazy {
+        MutableLiveData(false)
+    }
 }
