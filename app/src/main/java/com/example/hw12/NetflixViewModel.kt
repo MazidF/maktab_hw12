@@ -1,9 +1,14 @@
 package com.example.hw12
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class NetflixViewModel : ViewModel() {
-    val list = ArrayList<Movie>()
+    val isLoading by lazy {
+        MutableLiveData<Boolean>()
+    }
+    var images: ArrayList<Image>? = null
+    var list = ArrayList<Movie>()
     val favorite by lazy { // index of movies in list
         ArrayList<Int>()
     }

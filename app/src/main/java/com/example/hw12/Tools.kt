@@ -1,5 +1,6 @@
 package com.example.hw12
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.util.Log
 import android.widget.ImageView
@@ -116,4 +117,12 @@ fun setImage(imageView: ImageView, movie: Movie) {
     movie.image?.let {
         imageView.setImageBitmap(it)
     } ?: imageView.setImageResource(R.drawable.icon_movie_default_white)
+}
+
+
+@BindingAdapter("app:bitmap")
+fun setBitmap(imageView: ImageView, bitmap: Bitmap?) {
+    bitmap?.let {
+        imageView.setImageBitmap(it)
+    }
 }

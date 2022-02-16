@@ -3,13 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/vcc/AndroidStudioProjects/HW12/app/okhttpproject/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/vcc/AndroidStudioProjects/HW12/app/okhttpproject/src/main/res/menu/bottom_menu.xml" value="0.2" />
         <entry key="..\:/Users/vcc/AndroidStudioProjects/HW12/app/src/main/res/layout/activity_main.xml" value="0.18885869565217392" />
         <entry key="..\:/Users/vcc/AndroidStudioProjects/HW12/app/src/main/res/layout/fragment_coming_soon.xml" value="0.18885869565217392" />
         <entry key="..\:/Users/vcc/AndroidStudioProjects/HW12/app/src/main/res/layout/fragment_favorite.xml" value="0.18885869565217392" />
         <entry key="..\:/Users/vcc/AndroidStudioProjects/HW12/app/src/main/res/layout/fragment_home.xml" value="0.18885869565217392" />
         <entry key="..\:/Users/vcc/AndroidStudioProjects/HW12/app/src/main/res/layout/fragment_profile.xml" value="0.18885869565217392" />
         <entry key="..\:/Users/vcc/AndroidStudioProjects/HW12/app/src/main/res/layout/movie.xml" value="0.136" />
+        <entry key="..\:/Users/vcc/AndroidStudioProjects/HW12/app/src/main/res/layout/random_image.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/vcc/AndroidStudioProjects/HW12/app/src/main/res/menu/bottom_menu.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/vcc/AndroidStudioProjects/HW12/okhttpproject/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.248" />
       </map>
     </option>
   </component>

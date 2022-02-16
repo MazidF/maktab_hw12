@@ -24,8 +24,12 @@ class FragmentHome : Fragment(R.layout.fragment_home) {
             layoutManager = layoutManagerMaker()
             val adapter = MovieAdapter(model)
             if (adapter.itemCount == 0) {
-                for (i in 0..20) {
-                    adapter.addMovie(Movie("movie${i + 1}"))
+                model.isLoading.observe(viewLifecycleOwner) {
+                    if (it.not()) {
+                        for (i in 0..20) {
+                            adapter.addMovie(Movie("movie${i + 1}"))
+                        }
+                    }
                 }
             }
             this.adapter = adapter
@@ -35,11 +39,12 @@ class FragmentHome : Fragment(R.layout.fragment_home) {
 
     private fun layoutManagerMaker(): GridLayoutManager {
         val context = requireContext()
-        val spanCount = if (context.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            3
-        } else {
-            6
-        }
+        val spanCount =
+            if (context.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                3
+            } else {
+                6
+            }
         return GridLayoutManager(requireContext(), spanCount).apply {
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int) = 1
