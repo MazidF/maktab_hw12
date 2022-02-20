@@ -11,7 +11,9 @@ import com.example.hw12.databinding.ActivityMainBinding
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import okhttp3.*
+import okhttp3.logging.HttpLoggingInterceptor
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,8 +28,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
     lateinit var binding: ActivityMainBinding
-    val client by lazy {
-        OkHttpClient()
+    val client = OkHttpClient.Builder()
+        .addInterceptor(getInterceptor())
+        .connectTimeout(5, TimeUnit.SECONDS)
+        .build()
+
+    private fun getInterceptor(): Interceptor {
+        return HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+/*        return object : Interceptor {
+            override fun intercept(chain: Interceptor.Chain): Response {
+                with(chain) {
+                    val request = request()
+                        .newBuilder()
+                        .addHeader("token", "102345689")
+                        .build()
+                    return proceed(request)
+                }
+            }
+        }*/
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +84,6 @@ class MainActivity : AppCompatActivity() {
                     val listType = object : TypeToken<ArrayList<Image?>?>() {}.type
                     val gson = GsonBuilder().create()
                     model.images = gson.fromJson(json, listType)
-                    println()
                 }
             })
         }

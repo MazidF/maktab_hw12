@@ -2,16 +2,11 @@ package com.example.hw12
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.util.Log
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import com.example.hw12.HtmlValues.image
-import com.example.hw12.HtmlValues.movie
-import com.example.hw12.HtmlValues.name
-import com.example.hw12.HtmlValues.section
+import com.bumptech.glide.Glide
 import okhttp3.*
 import java.io.IOException
-import java.util.regex.Pattern
 
 fun OkHttpClient.requestMaker(url: String): Request {
     return Request.Builder()
@@ -42,7 +37,7 @@ fun OkHttpClient.request3(url: String): Response {
     return this.newCall(request).execute()
 }
 
-object HtmlValues {
+/*object HtmlValues {
     const val PAGE = "nm-collections-page"
     const val CONTAINER = "nm-collections-container with-blur"
     const val ROW = "nm-collections-row"
@@ -99,7 +94,7 @@ fun getMovies(input: String): ArrayList<Movie> {
         index = matcher.end()
     }
     return list
-}
+}*/
 
 @BindingAdapter("app:isLiked")
 fun isLiked(imageView: ImageView, isLiked: Boolean) {
@@ -125,4 +120,11 @@ fun setBitmap(imageView: ImageView, bitmap: Bitmap?) {
     bitmap?.let {
         imageView.setImageBitmap(it)
     }
+}
+
+@BindingAdapter("app:uri")
+fun loadImage(imageView: ImageView, uri: String) {
+    Glide.with(imageView.context)
+        .load(uri)
+        .into(imageView)
 }

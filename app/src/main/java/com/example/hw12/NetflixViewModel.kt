@@ -1,5 +1,6 @@
 package com.example.hw12
 
+import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
@@ -12,6 +13,7 @@ class NetflixViewModel : ViewModel() {
     val favorite by lazy { // index of movies in list
         ArrayList<Int>()
     }
+    var bitmap: Bitmap? = null
 
     fun addFavorite(movie: Movie) {
         favorite.add(movie.id - 1)
