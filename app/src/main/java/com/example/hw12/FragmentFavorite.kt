@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hw12.databinding.FragmentFavoriteBinding
 
 class FragmentFavorite : Fragment() {
+    private lateinit var adapter: MovieAdapter
     private val model: NetflixViewModel by activityViewModels()
-    var state: Parcelable? = null
     lateinit var binding: FragmentFavoriteBinding
 
     override fun onCreateView(
@@ -23,21 +23,24 @@ class FragmentFavorite : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentFavoriteBinding.inflate(layoutInflater, container, false)
-        val favorites = model.favorite.map { model.list[it] }
-        val adapter = MovieAdapter(model, ArrayList(favorites))
-        binding.favoriteList.apply {
-//            layoutManager = LinearLayoutManager(requireContext()).apply {
-//                this@FragmentFavorite.state?.let {
-//                    onRestoreInstanceState(it)
-//                }
-//            }
-            layoutManager = GridLayoutManager(requireContext(), 1).apply {
-                spanSizeLookup = object: GridLayoutManager.SpanSizeLookup() {
-                    override fun getSpanSize(position: Int) = 1
-                }
-            }
-            this.adapter = adapter
-        }
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        model.hasChanged.observe(viewLifecycleOwner) { hasChanged ->
+            if (hasChanged) {
+//                adapter.changeList(ArrayList(model.favorite.map { model.list[it] }))
+                val favorites = model.favorite.map { model.list[it] }
+                this.adapter = MovieAdapter(model, ArrayList(favorites))
+                binding.favoriteList.adapter = this.adapter
+            }
+        }
+        val favorites = model.favorite.map { model.list[it] }
+        adapter = MovieAdapter(model, ArrayList(favorites))
+        binding.favoriteList.apply {
+            layoutManager = LinearLayoutManager(context)
+            this.adapter = this@FragmentFavorite.adapter
+        }
     }
 }

@@ -8,6 +8,10 @@ data class Movie(val name: String, var image: Bitmap? = null) {
     companion object {
         private var counter = 1
         fun getId() = counter++
+
+        fun reset() {
+            counter = 1
+        }
     }
 
     val id = getId()

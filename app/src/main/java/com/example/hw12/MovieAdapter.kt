@@ -1,5 +1,6 @@
 package com.example.hw12
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -24,9 +25,10 @@ val options by lazy {
         .placeholder(R.drawable.loading_animation)
 }
 
-open class MovieAdapter(private val model: NetflixViewModel, list: ArrayList<Movie>? = null) : RecyclerView.Adapter<MovieAdapter.MovieHolder>() {
+open class MovieAdapter(private val model: NetflixViewModel, list: ArrayList<Movie>? = null)
+    : RecyclerView.Adapter<MovieAdapter.MovieHolder>() {
 
-    private val list: ArrayList<Movie> = list ?: model.list
+    private var list: ArrayList<Movie> = list ?: model.list
 
     class MovieHolder(view: View) : RecyclerView.ViewHolder(view) {
         var binding: MovieBinding = DataBindingUtil.bind(view)!!
@@ -57,8 +59,7 @@ open class MovieAdapter(private val model: NetflixViewModel, list: ArrayList<Mov
                             isFirstResource: Boolean
                         ): Boolean {
                             movie.image = resource
-                            binding.movie = movie
-                            return true
+                            return false
                         }
 
                     })
@@ -81,7 +82,7 @@ open class MovieAdapter(private val model: NetflixViewModel, list: ArrayList<Mov
         val movie = list[position]
         var url: String? = null
         if (movie.image == null) {
-            url = model.images?.get(position)?.download_url
+            url = model.images?.get(position)
         }
         holder.autoFill(movie, url)
     }
@@ -106,4 +107,10 @@ open class MovieAdapter(private val model: NetflixViewModel, list: ArrayList<Mov
     fun remove(movie: Movie) {
         remove(movie.id)
     }
+
+//    @SuppressLint("NotifyDataSetChanged")
+//    fun changeList(newList: ArrayList<Movie>? = null) {
+//        this.list = newList ?: model.list
+//        notifyDataSetChanged()
+//    }
 }

@@ -8,25 +8,24 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
-class NetworkManager {
-    companion object {
-        val client = OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
-            .build()
+object NetworkManager {
+    val client: OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        })
+        .build()
 
-        val gson = GsonBuilder()
-            .setLenient()
-            .create()
+    val gson: Gson = GsonBuilder()
+        .setLenient()
+        .create()
 
-        private val retrofit = Retrofit.Builder()
-            .baseUrl("http://51.195.19.222")
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .client(client)
-            .build()
+    private val retrofit = Retrofit.Builder()
+        .baseUrl("http://51.195.19.222")
+        .addConverterFactory(ScalarsConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .client(client)
+        .build()
 
-        val service = retrofit.create(MaktabService::class.java)
-    }
+    val service = retrofit.create(MaktabService::class.java)
 }
+

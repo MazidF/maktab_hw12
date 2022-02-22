@@ -5,15 +5,41 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class NetflixViewModel : ViewModel() {
+    val hasChanged by lazy {
+        MutableLiveData<Boolean>()
+    }
     val isLoading by lazy {
         MutableLiveData<Boolean>()
     }
-    var images: ArrayList<Image>? = null
+    var images: List<String>? = null
+    var images2: List<String>? = null
     var list = ArrayList<Movie>()
-    val favorite by lazy { // index of movies in list
-        ArrayList<Int>()
-    }
+    var list2 = ArrayList<Movie>()
+    var favorite = ArrayList<Int>()
+    var favorite2 = ArrayList<Int>()
     var bitmap: Bitmap? = null
+
+    init {
+        hasChanged.observeForever {
+            if (it) {
+                swap()
+            }
+        }
+    }
+
+    fun swap() {
+        val tempList = list
+        list = list2
+        list2 = tempList
+
+        val temp = favorite
+        favorite = favorite2
+        favorite2 = temp
+
+        val tempImages = images
+        images = images2
+        images2 = tempImages
+    }
 
     fun addFavorite(movie: Movie) {
         favorite.add(movie.id - 1)
