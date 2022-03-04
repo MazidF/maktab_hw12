@@ -7,21 +7,21 @@
 
     <fragment
         android:id="@+id/fragmentComingSoon"
-        android:name="com.example.hw12.FragmentComingSoon"
+        android:name="com.example.hw12.ui.comingsoon.FragmentComingSoon"
         android:label="FragmentComingSoon" />
     <fragment
         android:id="@+id/fragmentFavorite"
-        android:name="com.example.hw12.FragmentFavorite"
+        android:name="com.example.hw12.ui.favorite.FragmentFavorite"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" />
     <fragment
         android:id="@+id/fragmentHome"
-        android:name="com.example.hw12.FragmentHome"
+        android:name="com.example.hw12.ui.home.FragmentHome"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/fragmentProfile"
-        android:name="com.example.hw12.FragmentProfile"
+        android:name="com.example.hw12.ui.profile.FragmentProfile"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>

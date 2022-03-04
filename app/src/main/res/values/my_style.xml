@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="my_white">#C6C3C3</color>
+
+    <style name="circle_shape" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="my_custom_shape" parent="">
+        <item name="boxCornerRadiusTopStart">20dp</item>
+        <item name="boxCornerRadiusBottomEnd">20dp</item>
+    </style>
+
+    <style name="myTextView" parent="Widget.AppCompat.TextView">
+
+        <item name="android:gravity">start</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:text">default text comes here</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:marqueeRepeatLimit">marquee_forever</item>
+        <item name="android:singleLine">true</item>
+
+    </style>
+
+    <style name="myTextInputLayout" parent="">
+        <item name="android:textColorHint">@color/my_white</item>
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="boxCornerRadiusTopEnd">20dp</item>
+        <item name="boxCornerRadiusTopStart">20dp</item>
+        <item name="endIconMode">clear_text</item>
+        <item name="startIconTint">@color/my_white</item>
+        <item name="endIconTint">@color/my_white</item>
+    </style>
+
+    <style name="myButton" parent="">
+        <item name="android:padding">10dp</item>
+        <item name="cornerRadius">10dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="backgroundTint">#FF0025</item>
+    </style>
+
+    <style name="myTextInputEditText" parent="">
+        <item name="backgroundTint">#3E3D3D</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+</resources>

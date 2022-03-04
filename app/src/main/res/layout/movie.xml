@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.example.hw12.NetflixViewModel"/>
-        <import type="com.example.hw12.Movie"/>
+        <import type="com.example.hw12.viewmodel.NetflixViewModel"/>
+        <import type="com.example.hw12.model.Movie"/>
         <import type="androidx.lifecycle.LiveData"/>
         <variable
             name="movie"
-            type="Movie" />
+            type="com.example.hw12.model.Movie" />
         <variable
             name="model"
-            type="NetflixViewModel" />
+            type="com.example.hw12.viewmodel.NetflixViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
