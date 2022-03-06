@@ -1,47 +1,81 @@
 package com.example.hw12.ui.home
 
-import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.hw12.MovieAdapter
-import com.example.hw12.viewmodel.NetflixViewModel
 import com.example.hw12.R
 import com.example.hw12.databinding.FragmentHomeBinding
+import com.example.hw12.isLiked
+import com.example.hw12.model.imdb.IMDBItemUiState
+import com.example.hw12.ui.MovieAdapter
+import com.example.hw12.ui.NetflixViewModel
+import com.example.hw12.ui.favorite.FragmentFavorite
+import com.example.hw12.ui.favorite.FragmentFavoriteDirections
 
 class FragmentHome : Fragment(R.layout.fragment_home) {
+    private val navController by lazy {
+        findNavController()
+    }
     private val model: NetflixViewModel by activityViewModels()
     lateinit var binding: FragmentHomeBinding
-    lateinit var adapter: MovieAdapter
     var state: Parcelable? = null
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        adapter = MovieAdapter(model)
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        init()
+    }
+
+    private fun init() {
+        val adapter = MovieAdapter(model.list.value ?: arrayListOf()) { view, position, item ->
+            view.setOnClickListener {
+                isLiked(view, item.likeOrUnlike(position))
+            }
+            item
+        }
         binding.homeList.apply {
             layoutManager = layoutManagerMaker()
-            this.adapter = this@FragmentHome.adapter
-            model.hasChanged.observe(viewLifecycleOwner) {
-                if (it) {
-                    this.adapter = MovieAdapter(model)
-                    Toast.makeText(context, "changed", Toast.LENGTH_SHORT).show()
-                    model.hasChanged.value = false
+            this.adapter = adapter
+        }
+        with(model) {
+            val list = list.value
+            if (list == null || list.isEmpty()) {
+                this.list.observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        adapter.addList(it)
+                        this.list.removeObservers(viewLifecycleOwner)
+                    }
                 }
+                loadMovies(this@FragmentHome::onItemClick)
             }
         }
-        return binding.root
+    }
+
+    private fun onItemClick(item: IMDBItemUiState) {
+        val navDirection = when(parentFragmentManager.fragments.last()) {
+            is FragmentHome -> FragmentHomeDirections.actionFragmentHomeToFragmentMovie(item)
+            is FragmentFavorite -> FragmentFavoriteDirections.actionFragmentFavoriteToFragmentMovie(item)
+            else -> {
+                throw Exception("On Item Click in the wrong fragment")
+            }
+        }
+
+        navController.navigate(navDirection)
     }
 
     private fun layoutManagerMaker(): GridLayoutManager {

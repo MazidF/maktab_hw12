@@ -1,4 +1,4 @@
-package com.example.hw12.data
+package com.example.hw12.data.remote
 
 import androidx.lifecycle.LiveData
 import com.example.hw12.data.network.NetworkManager

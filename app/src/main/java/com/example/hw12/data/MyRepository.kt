@@ -1,15 +1,26 @@
 package com.example.hw12.data
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.example.hw12.data.local.SaveLocalDataSource
+import com.example.hw12.data.remote.IMDBDataSource
+import com.example.hw12.data.remote.UserDataSource
 import com.example.hw12.model.User
 import com.example.hw12.model.UserInfo
+import com.example.hw12.model.imdb.IMDBResponse
+import com.example.hw12.model.imdb.properties.SearchMethod
+import com.example.hw12.model.imdb.search.SearchResponse
+import com.example.hw12.utils.MyCallback
 import com.github.leonardoxh.livedatacalladapter.Resource
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
+import java.io.Serializable
 
-class MyRepository {
+object MyRepository {
+    private val saver = SaveLocalDataSource()
+    private val imdbSource = IMDBDataSource()
     private val userSource = UserDataSource()
     private val imageSource = ImageDataSource()
 
@@ -104,5 +115,25 @@ class MyRepository {
             it.observeForever(getImageObserver)
         }
         return Pair(getSucceed!!, userResult!!)
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    fun save(serializable: Serializable, context: Context): Boolean {
+        return saver.save(serializable, context)
+    }
+
+    fun <T : Serializable> load(context: Context) : T? {
+        return saver.load(context)
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+
+    fun getMovieList(callback: MyCallback<SearchResponse>) {
+        imdbSource.advanceSearch(callback)
+    }
+
+    fun getComingSoonList(callback: MyCallback<IMDBResponse>) {
+        imdbSource.search(SearchMethod.COMING_SOON, callback)
     }
 }

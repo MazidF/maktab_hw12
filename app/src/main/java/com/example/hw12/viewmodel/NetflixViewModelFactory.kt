@@ -2,6 +2,7 @@ package com.example.hw12.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.hw12.ui.NetflixViewModel
 
 object NetflixViewModelFactory : ViewModelProvider.NewInstanceFactory() {
 

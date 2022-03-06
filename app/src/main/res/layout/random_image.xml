@@ -3,11 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="android.graphics.Bitmap"/>
-        <import type="androidx.lifecycle.MutableLiveData"/>
-<!--        <variable
-            name="image"
-            type="MutableLiveData&lt;Bitmap>" />-->
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

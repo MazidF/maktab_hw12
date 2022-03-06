@@ -5,10 +5,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View"/>
         <import type="com.example.hw12.model.User"/>
+        <import type="androidx.lifecycle.LiveData"/>
+        <import type="android.graphics.Bitmap"/>
+
         <variable
-            name="user"
-            type="User"/>
+            name="bitmap"
+            type="LiveData&lt;Bitmap>" />
     </data>
 
     <ScrollView
@@ -42,7 +46,7 @@
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/profile_image"
                     android:background="@color/my_white"
-                    app:image='@{user.image}'
+                    app:image='@{bitmap}'
                     android:layout_width="200dp"
                     android:layout_height="200dp"
                     android:layout_gravity="center"
@@ -60,6 +64,15 @@
                     app:layout_constraintEnd_toEndOf="@+id/profile_image"
                     app:layout_constraintTop_toTopOf="@+id/profile_image" />
 
+                <ImageView
+                    android:id="@+id/profile_image_remove"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:visibility="@{bitmap != null ? View.VISIBLE : View.GONE, default=gone}"
+                    android:src="@drawable/ic_delete"
+                    app:layout_constraintStart_toStartOf="@+id/profile_image"
+                    app:layout_constraintTop_toTopOf="@+id/profile_image" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -74,7 +87,6 @@
                     style="@style/myTextInputEditText"
                     android:id="@+id/profile_name"
                     android:inputType="textPersonName"
-                    android:text='@{user.name}'
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -90,7 +102,6 @@
                 <com.google.android.material.textfield.TextInputEditText
                     style="@style/myTextInputEditText"
                     android:id="@+id/profile_family"
-                    android:text='@{user.family}'
                     android:inputType="textPersonName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -108,7 +119,6 @@
                 <com.google.android.material.textfield.TextInputEditText
                     style="@style/myTextInputEditText"
                     android:id="@+id/profile_email"
-                    android:text='@{user.email}'
                     android:inputType="textEmailAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -125,7 +135,6 @@
                 <com.google.android.material.textfield.TextInputEditText
                     style="@style/myTextInputEditText"
                     android:id="@+id/profile_username"
-                    android:text='@{user.userName}'
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -140,7 +149,6 @@
                 <com.google.android.material.textfield.TextInputEditText
                     style="@style/myTextInputEditText"
                     android:id="@+id/profile_phone"
-                    android:text='@{user.phone}'
                     android:inputType="phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -159,7 +167,6 @@
                 <com.google.android.material.textfield.TextInputEditText
                     style="@style/myTextInputEditText"
                     android:id="@+id/profile_birthday"
-                    android:text='@{user.birthday}'
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="date" />

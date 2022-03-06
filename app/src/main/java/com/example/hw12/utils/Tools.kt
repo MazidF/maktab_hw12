@@ -2,10 +2,14 @@ package com.example.hw12
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.view.View
 import android.widget.ImageView
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.hw12.model.Movie
+import com.example.hw12.utils.MyCallback
 import okhttp3.*
 import java.io.IOException
 
@@ -108,7 +112,7 @@ fun isLiked(imageView: ImageView, isLiked: Boolean) {
     }
 }
 
-@BindingAdapter("app:image")
+@BindingAdapter("app:movie")
 fun setImage(imageView: ImageView, movie: Movie) {
     movie.image?.let {
         imageView.setImageBitmap(it)
@@ -121,13 +125,35 @@ fun setImage(imageView: ImageView, bitmap: Bitmap?) {
     bitmap?.let {
         imageView.setImageBitmap(it)
     } ?: run {
-        imageView.setImageResource(R.drawable.ic_user)
+        imageView.setImageResource(R.drawable.ic_profile)
     }
 }
 
-@BindingAdapter("app:uri")
+@BindingAdapter("app:isVisible")
+fun isVisible(view: View, isVisible: Boolean) {
+    view.isVisible = isVisible
+}
+
+@BindingAdapter("app:loadImage")
 fun loadImage(imageView: ImageView, uri: String) {
     Glide.with(imageView.context)
         .load(uri)
+        .apply(options)
         .into(imageView)
+}
+
+val options by lazy {
+    RequestOptions()
+        .centerCrop()
+        .error(R.drawable.icon_movie_default_white)
+        .placeholder(R.drawable.loading_animation)
+}
+
+fun <T> retrofit2.Call<T>.setCallback(myCallback: MyCallback<T>?) : T? {
+    return if (myCallback != null) {
+        myCallback.call(this)
+        null
+    } else {
+        execute().body()
+    }
 }

@@ -1,21 +1,17 @@
 package com.example.hw12.data.network
 
 import com.example.hw12.model.User
-import com.example.hw12.model.UserInfo
 import com.github.leonardoxh.livedatacalladapter.LiveDataCallAdapterFactory
 import com.github.leonardoxh.livedatacalladapter.LiveDataResponseBodyConverterFactory
 import com.google.gson.*
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.reflect.Type
 
 object NetworkManager {
     val client: OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(crateInterceptor())
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         })
@@ -46,14 +42,23 @@ object NetworkManager {
         .addCallAdapterFactory(LiveDataCallAdapterFactory.create())
         .addConverterFactory(LiveDataResponseBodyConverterFactory.create())
         .addConverterFactory(GsonConverterFactory.create(gson))
-        .client(client)
+        .client(client.newBuilder()
+            .addInterceptor(crateInterceptor())
+            .build())
         .build()
 
     private val retrofitImage: Retrofit = retrofitUser.newBuilder()
         .baseUrl("http://51.195.19.222/")
         .build()
 
-    val userService = retrofitUser.create(UserService::class.java)
-    val imageService = retrofitImage.create(ImageService::class.java)
+    private val retrofitIMDB = Retrofit.Builder()
+        .baseUrl("https://imdb-api.com/en/API/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .client(client)
+        .build()
+
+    val userService: UserService = retrofitUser.create(UserService::class.java)
+    val imageService: ImageService = retrofitImage.create(ImageService::class.java)
+    val imdbService: IMDBService = retrofitIMDB.create(IMDBService::class.java)
 }
 

@@ -1,61 +1,70 @@
 package com.example.hw12.ui.comingsoon
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hw12.R
-import com.example.hw12.databinding.RandomImageBinding
-import kotlin.random.Random
+import com.example.hw12.databinding.FragmentComingSoonBinding
+import com.example.hw12.model.imdb.IMDBItemUiState
+import com.example.hw12.ui.MovieAdapter
 
 class FragmentComingSoon : Fragment() {
-    private lateinit var binding: RandomImageBinding
-    val liveImage by lazy {
-        MutableLiveData<Bitmap>()
+    private val navController by lazy {
+        findNavController()
     }
-    val random by lazy {
-        Random(System.currentTimeMillis())
-    }
-    val options by lazy {
-        RequestOptions()
-//            .centerCrop()
-            .fitCenter()
-            .placeholder(R.drawable.loading_animation)
-//            .placeholder(R.drawable.icon_load)
-            .error(R.drawable.icon_error)
-    }
-    val uri: String
-        get() = "https://picsum.photos/200/300?random=${random.nextInt(1, 1000)}"
+    private val model: ViewModelComingSoon by viewModels()
+    private lateinit var binding: FragmentComingSoonBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.random_image, container, false)
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_coming_soon, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        binding.image = liveImage
-//        binding.lifecycleOwner = this
+        init()
+    }
 
-        with(binding) {
-            getButton.setOnClickListener {
-                val uri = uri
-                Glide.with(this@FragmentComingSoon)
-                    .load(uri)
-                    .apply(options)
-                    .override(imageSize.text.toString().toInt())
-                    .into(imageView)
+    private fun init() {
+        val adapter = MovieAdapter(ArrayList(model.list.value ?: listOf())) { _, _, item ->
+            item.apply {
+                this.isLiked.value = null
             }
         }
+        with(model) {
+            list.observe(viewLifecycleOwner) {
+                if (it != null && it.isNotEmpty()) {
+                    adapter.addList(it)
+                    list.value = null
+                }
+            }
+            val list = list.value
+            if (list == null || list.isEmpty()) {
+                loadComingSoon(this@FragmentComingSoon::openMovieFragment)
+            }
+        }
+        with(binding) {
+            this.isFailed = model.failed
+            this.lifecycleOwner = viewLifecycleOwner
+
+            comingSoonList.apply {
+                layoutManager = LinearLayoutManager(requireContext())
+                this.adapter = adapter
+            }
+        }
+    }
+
+    private fun openMovieFragment(item: IMDBItemUiState) {
+        navController.navigate(FragmentComingSoonDirections.actionFragmentComingSoonToFragmentMovie(item))
     }
 }

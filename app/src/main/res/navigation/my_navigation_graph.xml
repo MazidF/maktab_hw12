@@ -8,20 +8,47 @@
     <fragment
         android:id="@+id/fragmentComingSoon"
         android:name="com.example.hw12.ui.comingsoon.FragmentComingSoon"
-        android:label="FragmentComingSoon" />
+        android:label="FragmentComingSoon"
+        tools:layout="@layout/fragment_coming_soon">
+        <action
+            android:id="@+id/action_fragmentComingSoon_to_fragmentMovie"
+            app:destination="@id/fragmentMovie" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentFavorite"
         android:name="com.example.hw12.ui.favorite.FragmentFavorite"
         android:label="fragment_favorite"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_fragmentFavorite_to_fragmentMovie"
+            app:destination="@id/fragmentMovie" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentHome"
         android:name="com.example.hw12.ui.home.FragmentHome"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_fragmentHome_to_fragmentMovie"
+            app:destination="@id/fragmentMovie" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentProfile"
-        android:name="com.example.hw12.ui.profile.FragmentProfile"
+        android:name="com.example.hw12.ui.signin.FragmentSignIn"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/fragmentMovie"
+        android:name="com.example.hw12.ui.FragmentMovie"
+        android:label="FragmentMovie"
+        tools:layout="@layout/fragment_movie">
+        <argument
+            android:name="item"
+            app:argType="com.example.hw12.model.imdb.IMDBItemUiState" />
+    </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.hw12.ui.MainActivity"
+        android:label="MainActivity"
+        tools:layout="@layout/activity_main"/>
 </navigation>
