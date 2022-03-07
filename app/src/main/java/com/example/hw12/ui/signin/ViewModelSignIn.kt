@@ -5,7 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.hw12.data.MyRepository
-import com.example.hw12.model.User
+import com.example.hw12.model.user.User
+import com.example.hw12.model.user.UsersResponse
 import com.github.leonardoxh.livedatacalladapter.Resource
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -48,5 +49,9 @@ class ViewModelSignIn(
             phone = userInfo[i++]
             birthday = userInfo[i]
         }
+    }
+
+    fun getUsers(): android.arch.lifecycle.LiveData<Resource<UsersResponse>> {
+        return repository.getUsers()
     }
 }

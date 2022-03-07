@@ -6,7 +6,7 @@
 
     <data>
         <import type="android.view.View"/>
-        <import type="com.example.hw12.model.User"/>
+        <import type="com.example.hw12.model.user.User"/>
         <import type="androidx.lifecycle.LiveData"/>
         <import type="android.graphics.Bitmap"/>
 

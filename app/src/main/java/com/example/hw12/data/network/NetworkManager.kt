@@ -1,6 +1,6 @@
 package com.example.hw12.data.network
 
-import com.example.hw12.model.User
+import com.example.hw12.model.user.User
 import com.github.leonardoxh.livedatacalladapter.LiveDataCallAdapterFactory
 import com.github.leonardoxh.livedatacalladapter.LiveDataResponseBodyConverterFactory
 import com.google.gson.*

@@ -1,8 +1,8 @@
-package com.example.hw12.model
+package com.example.hw12.model.user
 
-data class UserInfo(
+data class UserResponse(
+    val _id: String,
     val firstName: String,
-    val hobbies: List<String>,
     val lastName: String,
     val nationalCode: String
 )

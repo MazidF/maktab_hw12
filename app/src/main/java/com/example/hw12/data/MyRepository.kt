@@ -7,11 +7,13 @@ import androidx.lifecycle.Observer
 import com.example.hw12.data.local.SaveLocalDataSource
 import com.example.hw12.data.remote.IMDBDataSource
 import com.example.hw12.data.remote.UserDataSource
-import com.example.hw12.model.User
-import com.example.hw12.model.UserInfo
+import com.example.hw12.model.user.User
+import com.example.hw12.model.user.UserInfo
 import com.example.hw12.model.imdb.IMDBResponse
 import com.example.hw12.model.imdb.properties.SearchMethod
 import com.example.hw12.model.imdb.search.SearchResponse
+import com.example.hw12.model.user.UserResponse
+import com.example.hw12.model.user.UsersResponse
 import com.example.hw12.utils.MyCallback
 import com.github.leonardoxh.livedatacalladapter.Resource
 import okhttp3.MultipartBody
@@ -115,6 +117,10 @@ object MyRepository {
             it.observeForever(getImageObserver)
         }
         return Pair(getSucceed!!, userResult!!)
+    }
+
+    fun getUsers(): android.arch.lifecycle.LiveData<Resource<UsersResponse>> {
+        return userSource.getUsers()
     }
 
     //////////////////////////////////////////////////////////////////////////////

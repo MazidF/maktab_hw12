@@ -1,4 +1,4 @@
-package com.example.hw12.model
+package com.example.hw12.model.user
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

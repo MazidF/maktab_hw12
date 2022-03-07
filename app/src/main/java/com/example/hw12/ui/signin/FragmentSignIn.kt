@@ -6,26 +6,27 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.graphics.Color.RED
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity.CENTER
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hw12.R
+import com.example.hw12.databinding.DialogLoginBinding
 import com.example.hw12.databinding.FragmentProfileBinding
+import com.example.hw12.model.user.UserResponse
+import com.github.leonardoxh.livedatacalladapter.Resource
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.util.*
@@ -78,7 +79,8 @@ class FragmentSignIn : Fragment(R.layout.fragment_profile) {
             model.bitmap.value = it
         }
         galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) {
-            val input = context.contentResolver.openInputStream(it) ?: return@registerForActivityResult
+            val input =
+                context.contentResolver.openInputStream(it) ?: return@registerForActivityResult
             val bytes = input.readBytes()
             BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
         }
@@ -113,28 +115,32 @@ class FragmentSignIn : Fragment(R.layout.fragment_profile) {
             }
             profileLogin.setOnClickListener {
                 val context = requireContext()
-                val regex = Regex("^\\w+([\\.-]?\\w+)*@gmail\\.com$")
-                val view = LinearLayout(context).apply {
-                    gravity = CENTER
-                    orientation = LinearLayout.VERTICAL
+                val dialogBinding = DialogLoginBinding.inflate(layoutInflater)
+                val loginDialog = AlertDialog.Builder(context).setView(dialogBinding.root).create()
+                val adapter = UserAdapter(arrayListOf()) {
+                    // TODO: Login with user response
+                    loginDialog.cancel()
                 }
-                val loginDialog = AlertDialog.Builder(context).setView(view).create()
-                val editText = EditText(context).apply {
-                    layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+                dialogBinding.apply {
+                    loginList.apply {
+                        this.adapter = adapter
+                        layoutManager = LinearLayoutManager(context)
+                    }
                 }
-                view.addView(editText)
-                val button = Button(context).apply {
-                    text = "DONE"
-                    setOnClickListener {
-                        val text = editText.text.toString().trim()
-                        if (text.isNotBlank() and regex.matches(text)) {
-                            // TODO: log in the user
+                model.getUsers().also { liveData ->
+                    liveData.observeForever {
+                        if (it != null && it.isSuccess && it.resource != null) {
+                            adapter.addList(it.resource!!)
+                            dialogBinding.apply {
+                                loginList.visibility = VISIBLE
+                                loginProgressbar.visibility = GONE
+                            }
                         } else {
-                            editText.error = "Invalid Input!!"
+                            loginDialog.cancel()
+                            Toast.makeText(context, "Failed to login!!", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
-                view.addView(button)
                 loginDialog.show()
             }
             profileNameLayout.setHelperTextColor(ColorStateList.valueOf(RED))

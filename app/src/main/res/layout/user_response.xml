@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="user"
+            type="com.example.hw12.model.user.UsersResponseItem" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/user_root"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <TextView
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            style="@style/myTextView"
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text='@{user.nationalCode.concat("@gamil.com")}' />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:textColor="@color/black"
+                style="@style/myTextView"
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text='@{user.firstName, default="ali"}' />
+
+            <TextView
+                android:layout_marginStart="10dp"
+                android:textColor="@color/black"
+                style="@style/myTextView"
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@{user.lastName}" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>
