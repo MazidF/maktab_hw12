@@ -42,14 +42,14 @@ class FragmentComingSoon : Fragment() {
             }
         }
         with(model) {
-            list.observe(viewLifecycleOwner) {
-                if (it != null && it.isNotEmpty()) {
-                    adapter.addList(it)
-                    list.value = null
-                }
-            }
             val list = list.value
             if (list == null || list.isEmpty()) {
+                model.list.observe(viewLifecycleOwner) {
+                    if (it != null && it.isNotEmpty()) {
+                        adapter.addList(it)
+                        model.list.value = null
+                    }
+                }
                 loadComingSoon(this@FragmentComingSoon::openMovieFragment)
             }
         }
