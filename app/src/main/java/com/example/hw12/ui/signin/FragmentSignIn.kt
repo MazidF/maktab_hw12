@@ -20,22 +20,26 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hw12.R
 import com.example.hw12.databinding.DialogLoginBinding
-import com.example.hw12.databinding.FragmentProfileBinding
-import com.example.hw12.model.user.UserResponse
-import com.github.leonardoxh.livedatacalladapter.Resource
+import com.example.hw12.databinding.FragmentSignInBinding
+import com.example.hw12.ui.profile.FragmentProfile
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.util.*
 
-class FragmentSignIn : Fragment(R.layout.fragment_profile) {
-    private lateinit var cameraLauncher: ActivityResultLauncher<Void>
+class FragmentSignIn : Fragment(R.layout.fragment_sign_in) {
     private lateinit var galleryLauncher: ActivityResultLauncher<String>
+    private lateinit var cameraLauncher: ActivityResultLauncher<Void>
     private val model: ViewModelSignIn by activityViewModels()
-    lateinit var binding: FragmentProfileBinding
+    lateinit var binding: FragmentSignInBinding
+    private val navController by lazy {
+        findNavController()
+    }
     lateinit var dialog: AlertDialog
 
     override fun onCreateView(
@@ -43,7 +47,7 @@ class FragmentSignIn : Fragment(R.layout.fragment_profile) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentProfileBinding.inflate(layoutInflater, container, false)
+        binding = FragmentSignInBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -69,8 +73,22 @@ class FragmentSignIn : Fragment(R.layout.fragment_profile) {
     }
 
     private fun post() {
-        val (a, b) = model.post(binding.profileImage.drawingCache)
-        // TODO: change return type of post to LiveData<Source<String>>
+        model.post(binding.profileImage.drawingCache).apply {
+            observe(viewLifecycleOwner) {
+                if (it.resource != null) {
+                    goToProfile(it.resource!!)
+                } else {
+                    Toast.makeText(requireContext(), "Failed to SignIn", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun goToProfile(id: String) {
+/*        parentFragmentManager.commit {
+            replace<FragmentProfile>(R.id.container)
+        }*/
+        navController.navigate(FragmentSignInDirections.actionFragmentSignInToFragmentProfile(id))
     }
 
     override fun onAttach(context: Context) {
@@ -118,8 +136,8 @@ class FragmentSignIn : Fragment(R.layout.fragment_profile) {
                 val dialogBinding = DialogLoginBinding.inflate(layoutInflater)
                 val loginDialog = AlertDialog.Builder(context).setView(dialogBinding.root).create()
                 val adapter = UserAdapter(arrayListOf()) {
-                    // TODO: Login with user response
                     loginDialog.cancel()
+                    goToProfile(it._id)
                 }
                 dialogBinding.apply {
                     loginList.apply {

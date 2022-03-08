@@ -33,22 +33,49 @@
             app:destination="@id/fragmentMovie" />
     </fragment>
     <fragment
-        android:id="@+id/fragmentProfile"
+        android:id="@+id/fragmentSignIn"
         android:name="com.example.hw12.ui.signin.FragmentSignIn"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_sign_in" >
+        <action
+            android:id="@+id/action_fragmentSignIn_to_fragmentProfile"
+            app:destination="@id/fragmentProfile"
+            app:popUpTo="@id/fragmentHome" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentMovie"
-        android:name="com.example.hw12.ui.FragmentMovie"
+        android:name="com.example.hw12.ui.movie.FragmentMovie"
         android:label="FragmentMovie"
         tools:layout="@layout/fragment_movie">
         <argument
             android:name="item"
             app:argType="com.example.hw12.model.imdb.IMDBItemUiState" />
+        <action
+            android:id="@+id/action_fragmentMovie_to_fragmentPlayer"
+            app:destination="@id/fragmentPlayer" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
         android:name="com.example.hw12.ui.MainActivity"
         android:label="MainActivity"
         tools:layout="@layout/activity_main"/>
+    <fragment
+        android:id="@+id/fragmentProfile"
+        android:name="com.example.hw12.ui.profile.FragmentProfile"
+        android:label="FragmentProfile"
+        tools:layout="@layout/fragment_profile">
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentPlayer"
+        android:name="com.example.hw12.ui.player.FragmentPlayer"
+        android:label="FragmentPlayer"
+        tools:layout="@layout/fragment_player">
+        <argument
+            android:name="uri"
+            app:argType="string"
+            android:defaultValue="null" />
+    </fragment>
 </navigation>

@@ -13,6 +13,9 @@
         <variable
             name="model"
             type="com.example.hw12.ui.NetflixViewModel" />
+        <variable
+            name="hasSelection"
+            type="LiveData&lt;Boolean>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,6 +23,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/movie_root"
         android:padding="10dp">
+
+        <RadioButton
+            app:isVisible="@{hasSelection}"
+            android:id="@+id/movie_checkBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/movie_image"
@@ -43,6 +54,8 @@
             android:gravity="center"
             android:text='@{item.title, default="name"}'
             android:textColor="@color/white"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:textSize="18dp"
 
             app:layout_constraintEnd_toEndOf="@+id/movie_image"

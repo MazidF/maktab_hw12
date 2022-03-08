@@ -4,4 +4,5 @@ import androidx.lifecycle.ViewModel
 
 class ViewModelPlayer : ViewModel() {
 
+    var currentPosition = 0L
 }

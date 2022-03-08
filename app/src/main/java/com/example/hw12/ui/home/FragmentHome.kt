@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenResumed
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.hw12.R
@@ -15,9 +17,11 @@ import com.example.hw12.databinding.FragmentHomeBinding
 import com.example.hw12.isLiked
 import com.example.hw12.model.imdb.IMDBItemUiState
 import com.example.hw12.ui.MovieAdapter
+import com.example.hw12.ui.MovieItemTouchHelper
 import com.example.hw12.ui.NetflixViewModel
 import com.example.hw12.ui.favorite.FragmentFavorite
 import com.example.hw12.ui.favorite.FragmentFavoriteDirections
+import com.example.hw12.ui.home.tracker.MovieSelectionTracker
 
 class FragmentHome : Fragment(R.layout.fragment_home) {
     private val navController by lazy {
@@ -51,6 +55,7 @@ class FragmentHome : Fragment(R.layout.fragment_home) {
         binding.homeList.apply {
             layoutManager = layoutManagerMaker()
             this.adapter = adapter
+//            adapter.tracker = MovieSelectionTracker.getTracker(binding.homeList)
         }
         with(model) {
             val list = list.value

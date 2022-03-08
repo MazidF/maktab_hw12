@@ -1,6 +1,8 @@
 package com.example.hw12.data
 
 import android.content.Context
+import android.graphics.BitmapFactory
+import androidx.core.content.FileProvider
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -12,7 +14,6 @@ import com.example.hw12.model.user.UserInfo
 import com.example.hw12.model.imdb.IMDBResponse
 import com.example.hw12.model.imdb.properties.SearchMethod
 import com.example.hw12.model.imdb.search.SearchResponse
-import com.example.hw12.model.user.UserResponse
 import com.example.hw12.model.user.UsersResponse
 import com.example.hw12.utils.MyCallback
 import com.github.leonardoxh.livedatacalladapter.Resource
@@ -26,11 +27,10 @@ object MyRepository {
     private val userSource = UserDataSource()
     private val imageSource = ImageDataSource()
 
-    private var putSucceed: MutableLiveData<Boolean>? = null
-    private var getSucceed: MutableLiveData<Boolean>? = null
+    private var putResource: MutableLiveData<MyResource<String>>? = null
+    private var getResource: MutableLiveData<MyResource<User>>? = null
 
     private var id: LiveData<Resource<String>>? = null
-    private var userResult: MutableLiveData<User>? = null
     private var userInfo: LiveData<Resource<UserInfo>>? = null
     private var image: LiveData<Resource<ResponseBody>>? = null
 
@@ -57,7 +57,7 @@ object MyRepository {
     private val getImageObserver = Observer<Resource<ResponseBody>> {
         if (it.isSuccess) {
             if (userInfo != null) {
-                createUser()
+                getResult(true)
             }
         } else {
             getResult(false)
@@ -67,56 +67,60 @@ object MyRepository {
     private val getUserInfoObserver = Observer<Resource<UserInfo>> {
         if (it.isSuccess) {
             if (image != null) {
-                createUser()
+                getResult(true)
             }
         } else {
             getResult(false)
         }
     }
 
-    private fun createUser() {
-        val userInfo = userInfo!!
-        val image = image!!
-        userInfo.removeObserver(getUserInfoObserver)
-        image.removeObserver(getImageObserver)
-        userResult!!.postValue(User.fromUserInfo(userInfo.value!!.resource!!))
-
-        getResult(true)
-        this.userInfo = null
-        this.image = null
-    }
-
     private fun putResult(boolean: Boolean) {
-        putSucceed?.postValue(boolean)
-        putSucceed = null
+        if (boolean) {
+            putResource!!.postValue(MyResource.success(id!!.value!!.resource!!))
+        } else {
+            putResource!!.postValue(MyResource.error(Exception("Can not Load")))
+        }
+        putResource = null
+        image = null
+        id = null
     }
 
     private fun getResult(boolean: Boolean) {
-        getSucceed?.postValue(boolean)
-        getSucceed = null
+        if (boolean) {
+            val image = image!!
+            val bytes = image.value!!.resource!!.bytes()
+            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+            getResource!!.postValue(MyResource.success(User.fromUserInfo(userInfo!!.value!!.resource!!).apply {
+                this.image = bitmap
+            }))
+        } else {
+            getResource!!.postValue(MyResource.error(Exception("Can not Load")))
+        }
+        getResource = null
+        userInfo = null
+        image = null
     }
 
-    fun putUser(userInfo: UserInfo, image: MultipartBody.Part):
-            Pair<MutableLiveData<Boolean>, LiveData<Resource<String>>> {
-        putSucceed = MutableLiveData()
+    fun putUser(userInfo: UserInfo, image: MultipartBody.Part): LiveData<MyResource<String>> {
+        putResource = MutableLiveData()
         id = userSource.postUser(userInfo).also {
             it.observeForever(setIdObserver)
         }
         this.image = imageSource.postImage(userInfo.nationalCode, image).also {
             it.observeForever(setImageObserver)
         }
-        return Pair(putSucceed!!, id!!)
+        return putResource!!
     }
 
-    fun getUser(id: String, email: String): Pair<MutableLiveData<Boolean>, MutableLiveData<User>> {
-        userResult = MutableLiveData<User>()
+    fun getUser(id: String, email: String): LiveData<MyResource<User>> {
+        getResource = MutableLiveData()
         userInfo = userSource.getUser(id).also {
             it.observeForever(getUserInfoObserver)
         }
         this.image = imageSource.getImage(email).also {
             it.observeForever(getImageObserver)
         }
-        return Pair(getSucceed!!, userResult!!)
+        return getResource!!
     }
 
     fun getUsers(): android.arch.lifecycle.LiveData<Resource<UsersResponse>> {

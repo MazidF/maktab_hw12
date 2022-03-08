@@ -55,4 +55,10 @@ class NetflixViewModel : ViewModel() {
             favorites.value!!.remove(position)
         }
     }
+
+    val hide = MutableLiveData(false)
+
+    fun hide() {
+        hide.value = true
+    }
 }

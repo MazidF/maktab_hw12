@@ -11,6 +11,7 @@ import com.example.hw12.ui.NetflixViewModel
 import com.example.hw12.databinding.FragmentFavoriteBinding
 import com.example.hw12.isLiked
 import com.example.hw12.ui.MovieAdapter
+import com.example.hw12.ui.MovieItemTouchHelper.Companion.connect
 
 class FragmentFavorite : Fragment() {
     lateinit var binding: FragmentFavoriteBinding
@@ -31,13 +32,11 @@ class FragmentFavorite : Fragment() {
     }
 
     private fun init() {
-        val adapter = object : MovieAdapter(model.list.value!!, { view, position, item ->
-            view.setOnClickListener {
-                isLiked(view, item.likeOrUnlike(position))
-            }
+        val favorites = model.favorites.value!!
+        val modelList = model.list.value!!
+        val adapter = object : MovieAdapter(model.list.value!!, { _, _, item ->
             item
         }) {
-            private val favorites = model.favorites.value!!
             override fun onBindViewHolder(holder: MovieHolder, position: Int) {
                 val realPosition = favorites[position]
                 holder.bind(realPosition, list[realPosition])
@@ -49,6 +48,11 @@ class FragmentFavorite : Fragment() {
             favoriteList.apply {
                 this.adapter = adapter
                 layoutManager = LinearLayoutManager(requireContext())
+                connect {
+                    val realPosition = favorites[it]
+                    modelList[realPosition].likeOrUnlike(realPosition)
+                    true
+                }
             }
         }
     }

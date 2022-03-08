@@ -4,7 +4,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.selection.ItemDetailsLookup
+import androidx.recyclerview.selection.Selection
+import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hw12.R
 import com.example.hw12.databinding.MovieBinding
@@ -12,17 +15,43 @@ import com.example.hw12.model.imdb.IMDBItemUiState
 
 open class MovieAdapter(val list: ArrayList<IMDBItemUiState>, val setup: (ImageView, Int, IMDBItemUiState) -> IMDBItemUiState)
     : RecyclerView.Adapter<MovieAdapter.MovieHolder>() {
+    val hasSelection by lazy {
+        MutableLiveData(false)
+    }
+
+//    init {
+//        setHasStableIds(true)
+//    }
+
+/*    var tracker: SelectionTracker<Long>? = null
+    set(value) {
+        value?.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
+            override fun onSelectionChanged() {
+                super.onSelectionChanged()
+            }
+        })
+        field = value
+    }*/
 
     inner class MovieHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private var binding: MovieBinding = DataBindingUtil.bind(view)!!
+        private var binding = MovieBinding.bind(view).apply {
+//            this.hasSelection = this@MovieAdapter.hasSelection
+//            this.lifecycleOwner = view.findViewTreeLifecycleOwner()
+        }
 
         fun bind(position: Int, item: IMDBItemUiState) {
             with(binding) {
                 this.item = setup(movieLike, position, item)
+//                movieCheckBtn.isChecked = tracker?.isSelected(position.toLong()) ?: false
                 movieRoot.setOnClickListener {
                     item.invoke()
                 }
             }
+        }
+
+        fun getItemDetail() = object : ItemDetailsLookup.ItemDetails<Long>() {
+            override fun getPosition() = adapterPosition
+            override fun getSelectionKey() = itemId
         }
     }
 
@@ -40,6 +69,10 @@ open class MovieAdapter(val list: ArrayList<IMDBItemUiState>, val setup: (ImageV
     fun addList(list: List<IMDBItemUiState>) {
         this.list.addAll(list)
         notifyInsert(list.size)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
     }
 
     fun notifyInsert(size: Int) {

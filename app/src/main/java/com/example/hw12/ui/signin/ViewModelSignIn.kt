@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.hw12.data.MyRepository
+import com.example.hw12.data.MyResource
 import com.example.hw12.model.user.User
 import com.example.hw12.model.user.UsersResponse
 import com.github.leonardoxh.livedatacalladapter.Resource
@@ -20,7 +21,7 @@ class ViewModelSignIn(
     }
     val userInfo = Array(6) { "" }
 
-    fun post(bitmap: Bitmap?): Pair<MutableLiveData<Boolean>, LiveData<Resource<String>>> {
+    fun post(bitmap: Bitmap?): LiveData<MyResource<String>> {
         val user: User = createUser()
         val bytes = getByteArray(bitmap) ?: byteArrayOf()
         val body = MultipartBody.create(MediaType.parse("image/*"), bytes)
@@ -28,7 +29,7 @@ class ViewModelSignIn(
         return repository.putUser(user.toUserInfo(), image)
     }
 
-    fun get(id: String, email: String): Pair<MutableLiveData<Boolean>, MutableLiveData<User>> {
+    fun get(id: String, email: String): LiveData<MyResource<User>> {
         return repository.getUser(id, email)
     }
 

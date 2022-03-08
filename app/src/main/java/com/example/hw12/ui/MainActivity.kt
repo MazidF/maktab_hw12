@@ -1,8 +1,10 @@
 package com.example.hw12.ui
 
 import android.os.Bundle
+import android.view.View.GONE
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -30,9 +32,11 @@ class MainActivity : AppCompatActivity() {
             isLoading.observe(this@MainActivity) {
                 if (it == false) {
                     binding.mainList.removeViewAt(0)
-                    isLoading.value = null
                     isLoading.removeObservers(this@MainActivity)
                 }
+            }
+            hide.observe(this@MainActivity) {
+                binding.bottomNavigation.isVisible = it == false
             }
         }
         with(binding) {
