@@ -135,7 +135,7 @@ fun isVisible(view: View, isVisible: Boolean) {
 }
 
 @BindingAdapter("app:loadImage")
-fun loadImage(imageView: ImageView, uri: String) {
+fun loadImage(imageView: ImageView, uri: String?) {
     Glide.with(imageView.context)
         .load(uri)
         .apply(options)

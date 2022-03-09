@@ -2,6 +2,7 @@ package com.example.hw12.ui
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.recyclerview.selection.MutableSelection
 import com.example.hw12.data.MyRepository
 import com.example.hw12.model.imdb.IMDBItemUiState
 import com.example.hw12.model.imdb.search.SearchResponse
@@ -19,7 +20,7 @@ class NetflixViewModel : ViewModel() {
     }
     val isLoading = MutableLiveData<Boolean>()
 
-    fun loadMovies(onClick: IMDBItemUiState.() -> Unit) {
+    fun loadMovies() {
         isLoading.value = true
         val callback = object : MyCallback<SearchResponse> {
             override fun onFailure(t: Throwable) {
@@ -34,7 +35,9 @@ class NetflixViewModel : ViewModel() {
                     return
                 }
                 val resultList = t.results.map {
-                    val item = it.toItemUiState(onClick)
+                    val item = it.toItemUiState {
+                        clickedItem.value = this
+                    }
                     item.apply {
                         isLiked.observeForever { bool ->
                             favorite(item.position, bool)
@@ -60,5 +63,13 @@ class NetflixViewModel : ViewModel() {
 
     fun hide() {
         hide.value = true
+    }
+
+    val clickedItem by lazy {
+        MutableLiveData<IMDBItemUiState>()
+    }
+
+    val selected by lazy {
+        MutableSelection<Long>()
     }
 }

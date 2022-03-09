@@ -14,6 +14,7 @@ import com.example.hw12.model.user.UserInfo
 import com.example.hw12.model.imdb.IMDBResponse
 import com.example.hw12.model.imdb.properties.SearchMethod
 import com.example.hw12.model.imdb.search.SearchResponse
+import com.example.hw12.model.imdb.trailer.TrailerResponse
 import com.example.hw12.model.user.UsersResponse
 import com.example.hw12.utils.MyCallback
 import com.github.leonardoxh.livedatacalladapter.Resource
@@ -145,5 +146,9 @@ object MyRepository {
 
     fun getComingSoonList(callback: MyCallback<IMDBResponse>) {
         imdbSource.search(SearchMethod.COMING_SOON, callback)
+    }
+
+    fun getTrailerUri(id: String, myCallback: MyCallback<TrailerResponse>? = null) {
+        imdbSource.getTrailer(id, myCallback)
     }
 }

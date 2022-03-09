@@ -46,7 +46,7 @@ class FragmentHome : Fragment(R.layout.fragment_home) {
     }
 
     private fun init() {
-        val adapter = MovieAdapter(model.list.value ?: arrayListOf()) { view, position, item ->
+        val adapter = MovieAdapter(model.list.value ?: arrayListOf(), true) { view, position, item ->
             view.setOnClickListener {
                 isLiked(view, item.likeOrUnlike(position))
             }
@@ -55,7 +55,7 @@ class FragmentHome : Fragment(R.layout.fragment_home) {
         binding.homeList.apply {
             layoutManager = layoutManagerMaker()
             this.adapter = adapter
-//            adapter.tracker = MovieSelectionTracker.getTracker(binding.homeList)
+            adapter.tracker = MovieSelectionTracker.getTracker(binding.homeList)
         }
         with(model) {
             val list = list.value
@@ -66,21 +66,19 @@ class FragmentHome : Fragment(R.layout.fragment_home) {
                         this.list.removeObservers(viewLifecycleOwner)
                     }
                 }
-                loadMovies(this@FragmentHome::onItemClick)
+                loadMovies()
+            }
+            clickedItem.observe(viewLifecycleOwner) {
+                if (it != null) {
+                    clickedItem.value = null
+                    onItemClick(it)
+                }
             }
         }
     }
 
     private fun onItemClick(item: IMDBItemUiState) {
-        val navDirection = when(parentFragmentManager.fragments.last()) {
-            is FragmentHome -> FragmentHomeDirections.actionFragmentHomeToFragmentMovie(item)
-            is FragmentFavorite -> FragmentFavoriteDirections.actionFragmentFavoriteToFragmentMovie(item)
-            else -> {
-                throw Exception("On Item Click in the wrong fragment")
-            }
-        }
-
-        navController.navigate(navDirection)
+        navController.navigate(FragmentHomeDirections.actionFragmentHomeToFragmentMovie(item))
     }
 
     private fun layoutManagerMaker(): GridLayoutManager {
@@ -101,12 +99,14 @@ class FragmentHome : Fragment(R.layout.fragment_home) {
     override fun onPause() {
         super.onPause()
         state = binding.homeList.layoutManager?.onSaveInstanceState()
+        (binding.homeList.adapter as MovieAdapter).tracker?.copySelection(model.selected)
     }
 
     override fun onResume() {
         super.onResume()
         binding.homeList.apply {
             layoutManager?.onRestoreInstanceState(state)
+            (adapter as MovieAdapter).tracker!!.setItemsSelected(model.selected, model.selected.isEmpty.not())
         }
     }
 

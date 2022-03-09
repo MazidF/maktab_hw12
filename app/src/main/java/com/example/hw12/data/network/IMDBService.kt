@@ -6,6 +6,7 @@ import com.example.hw12.model.imdb.properties.IMDBLanguages
 import com.example.hw12.model.imdb.properties.IMDBTitleType
 import com.example.hw12.model.imdb.properties.SearchMethod
 import com.example.hw12.model.imdb.search.SearchResponse
+import com.example.hw12.model.imdb.trailer.TrailerResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -28,4 +29,9 @@ interface IMDBService {
     fun searchMethod(
         @Path("method") method: SearchMethod
     ) : Call<IMDBResponse>
+
+    @GET("Trailer/$TOKEN/{id}")
+    fun getTrailer(
+        @Path("id") id: String
+    ) : Call<TrailerResponse>
 }

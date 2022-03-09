@@ -6,14 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hw12.ui.NetflixViewModel
 import com.example.hw12.databinding.FragmentFavoriteBinding
 import com.example.hw12.isLiked
+import com.example.hw12.model.imdb.IMDBItemUiState
 import com.example.hw12.ui.MovieAdapter
 import com.example.hw12.ui.MovieItemTouchHelper.Companion.connect
 
 class FragmentFavorite : Fragment() {
+    val navController by lazy {
+        findNavController()
+    }
     lateinit var binding: FragmentFavoriteBinding
     private val model: NetflixViewModel by activityViewModels()
 
@@ -34,7 +39,7 @@ class FragmentFavorite : Fragment() {
     private fun init() {
         val favorites = model.favorites.value!!
         val modelList = model.list.value!!
-        val adapter = object : MovieAdapter(model.list.value!!, { _, _, item ->
+        val adapter = object : MovieAdapter(model.list.value!!, setup = { _, _, item ->
             item
         }) {
             override fun onBindViewHolder(holder: MovieHolder, position: Int) {
@@ -55,5 +60,17 @@ class FragmentFavorite : Fragment() {
                 }
             }
         }
+        with(model) {
+            clickedItem.observe(viewLifecycleOwner) {
+                if (it != null) {
+                    clickedItem.value = null
+                    onItemClick(it)
+                }
+            }
+        }
+    }
+
+    private fun onItemClick(item: IMDBItemUiState) {
+        navController.navigate(FragmentFavoriteDirections.actionFragmentFavoriteToFragmentMovie(item))
     }
 }

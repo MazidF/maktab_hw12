@@ -4,6 +4,7 @@ import com.example.hw12.data.network.NetworkManager
 import com.example.hw12.model.imdb.IMDBResponse
 import com.example.hw12.model.imdb.properties.SearchMethod
 import com.example.hw12.model.imdb.search.SearchResponse
+import com.example.hw12.model.imdb.trailer.TrailerResponse
 import com.example.hw12.setCallback
 import com.example.hw12.utils.MyCallback
 
@@ -21,6 +22,11 @@ class IMDBDataSource {
 
     fun advanceSearch(myCallback: MyCallback<SearchResponse>? = null): SearchResponse? {
         val call = service.search()
+        return call.setCallback(myCallback)
+    }
+
+    fun getTrailer(id: String, myCallback: MyCallback<TrailerResponse>? = null): TrailerResponse? {
+        val call = service.getTrailer(id)
         return call.setCallback(myCallback)
     }
 }

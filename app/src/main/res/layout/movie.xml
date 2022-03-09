@@ -15,7 +15,7 @@
             type="com.example.hw12.ui.NetflixViewModel" />
         <variable
             name="hasSelection"
-            type="LiveData&lt;Boolean>" />
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
